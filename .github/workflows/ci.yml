@@ -1,0 +1,50 @@
+name: CI
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+  schedule:
+   - cron: '0 4 * * 0'  # weekly on Sunday at 04:00 UTC
+  workflow_dispatch:
+
+jobs:
+  industrial_ci:
+    name: ROS ${{ matrix.ROS_DISTRO }} (${{ matrix.ROS_REPO }})
+    runs-on: ubuntu-latest
+
+    strategy:
+      fail-fast: false
+      matrix:
+        ROS_DISTRO: [rolling, lyrical, jazzy, humble]
+        ROS_REPO: [main, testing]
+
+    steps:
+      - uses: actions/checkout@v6
+      - uses: 'ros-industrial/industrial_ci@master'
+        env:
+          ROS_DISTRO: ${{ matrix.ROS_DISTRO }}
+          ROS_REPO: ${{ matrix.ROS_REPO }}
+
+  ruff:
+    name: Python (ruff) linting
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v6
+      - uses: astral-sh/ruff-action@v4.0.0 # ruff check
+      - uses: astral-sh/ruff-action@v4.0.0 # ruff format
+        with:
+          args: "format --check --diff"
+
+  mdformat:
+    name: Markdown (mdformat) linting
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v6
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.x'
+      - run: pip install mdformat mdformat-ruff
+      - run: mdformat --check .
