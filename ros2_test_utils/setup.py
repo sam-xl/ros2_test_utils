@@ -16,7 +16,9 @@ setup(
     maintainer_email="d.kroezen@tudelft.nl",
     description="pytest plugin and test helper classes for integration tests of ROS 2 interfaces.",
     license="Apache-2.0",
-    tests_require=["pytest"],
+    extras_require={
+        "test": ["pytest"],
+    },
     entry_points={
         "console_scripts": [],
         "pytest11": [
