@@ -77,7 +77,11 @@ class TestActionClient:
         Returns the GetResult_Response (with .status and .result), or None
         if the goal was rejected.
         """
-        if not self._node.executor.is_spinning:
+        # use getattr to default to True for ROS 2 Humble as 'is_spinning' is not present yet.
+        # instead the timeout will be hit
+        is_spinning = getattr(self._node.executor, "is_spinning", True)
+
+        if not is_spinning:
             raise RuntimeError(
                 "TestActionClient requires the executor to be spinning before calling send_goal()",
             )
