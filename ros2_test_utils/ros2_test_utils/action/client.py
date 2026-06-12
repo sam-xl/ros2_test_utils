@@ -60,16 +60,16 @@ class TestActionClient:
         self._last_goal_handle: ClientGoalHandle | None = None
         self._async_result_future: Any | None = None
 
-    def wait_for_server(self, timeout: float = 5.0) -> bool:
+    def wait_for_server(self, timeout_sec: float = 5.0) -> bool:
         """Block until the server is available. Returns True on success, False on timeout."""
-        return self._client.wait_for_server(timeout_sec=timeout)
+        return self._client.wait_for_server(timeout_sec=timeout_sec)
 
     def send_goal(
         self,
         goal: Any,
         *,
         feedback_callback: Callable[[Any], None] | None = None,
-        timeout: float = 5.0,
+        timeout_sec: float = 5.0,
     ) -> Any | None:
         """
         Send a goal and block until the result arrives.
@@ -91,7 +91,7 @@ class TestActionClient:
 
         combined_cb = self._make_feedback_cb(feedback_callback)
         goal_future = self._client.send_goal_async(goal, feedback_callback=combined_cb)
-        deadline = time.monotonic() + timeout
+        deadline = time.monotonic() + timeout_sec
 
         while not goal_future.done():
             assert time.monotonic() < deadline, "Timed out waiting for goal acceptance"
@@ -155,27 +155,27 @@ class TestActionClient:
         future.add_done_callback(_on_accepted)
         return future
 
-    def wait_for_goal_in_flight(self, timeout: float = 5.0) -> None:
+    def wait_for_goal_in_flight(self, timeout_sec: float = 5.0) -> None:
         """Block until a goal has been accepted and is in flight."""
-        deadline = time.monotonic() + timeout
+        deadline = time.monotonic() + timeout_sec
         while not self.is_goal_in_flight:
             assert time.monotonic() < deadline, "Timed out waiting for goal to be in flight"
             time.sleep(_POLL_INTERVAL)
 
-    def wait_for_async_result(self, timeout: float = 5.0) -> Any:
+    def wait_for_async_result(self, timeout_sec: float = 5.0) -> Any:
         """Block until the result of the most recent async goal arrives and return it."""
         with self._lock:
             future = self._async_result_future
         if future is None:
             raise RuntimeError("wait_for_async_result called before any async goal was sent")
 
-        deadline = time.monotonic() + timeout
+        deadline = time.monotonic() + timeout_sec
         while not future.done():
             assert time.monotonic() < deadline, "Timed out waiting for async result"
             time.sleep(_POLL_INTERVAL)
         return future.result()
 
-    def cancel_current_goal(self, timeout: float = 5.0) -> bool:
+    def cancel_current_goal(self, timeout_sec: float = 5.0) -> bool:
         """
         Cancel the goal currently in flight via send_goal().
 
@@ -190,7 +190,7 @@ class TestActionClient:
             return False
 
         cancel_future = handle.cancel_goal_async()
-        deadline = time.monotonic() + timeout
+        deadline = time.monotonic() + timeout_sec
         while not cancel_future.done():
             assert time.monotonic() < deadline, "Timed out waiting for cancel response"
             time.sleep(_POLL_INTERVAL)

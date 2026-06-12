@@ -197,11 +197,11 @@ def make_test_client(test_node):
     """
     created = []
 
-    def _factory(action_type, action_name, timeout: float = _WAIT_FOR_SERVER_TIMEOUT):
+    def _factory(action_type, action_name, timeout_sec: float = _WAIT_FOR_SERVER_TIMEOUT):
         client = TestActionClient(test_node, action_type, action_name)
         created.append(client)
-        assert client.wait_for_server(timeout=timeout), (
-            f"Action server '{action_name}' did not become available within {timeout}s"
+        assert client.wait_for_server(timeout_sec=timeout_sec), (
+            f"Action server '{action_name}' did not become available within {timeout_sec}s"
         )
         return client
 
@@ -258,13 +258,13 @@ def make_test_client_on_node(make_node):
         action_name,
         *,
         node_name: str = "test_client_node",
-        timeout: float = _WAIT_FOR_SERVER_TIMEOUT,
+        timeout_sec: float = _WAIT_FOR_SERVER_TIMEOUT,
     ):
         node = make_node(node_name)
         client = TestActionClient(node, action_type, action_name)
         created.append(client)
-        assert client.wait_for_server(timeout=timeout), (
-            f"Action server '{action_name}' did not become available within {timeout}s"
+        assert client.wait_for_server(timeout_sec=timeout_sec), (
+            f"Action server '{action_name}' did not become available within {timeout_sec}s"
         )
         return client
 

@@ -107,7 +107,7 @@ def test_send_and_cancel_goal(fibonacci_server, fibonacci_client):
     thread.start()
 
     # can only cancel if the goal is processed
-    fibonacci_client.wait_for_goal_in_flight(timeout=5.0)
+    fibonacci_client.wait_for_goal_in_flight(timeout_sec=5.0)
 
     # verify that the goal was accepted
     assert fibonacci_client.was_last_goal_accepted
@@ -235,7 +235,7 @@ def test_reset_raises_when_goal_in_flight(fibonacci_server, fibonacci_client):
     thread = threading.Thread(target=lambda: fibonacci_client.send_goal(Fibonacci.Goal()))
     thread.start()
 
-    fibonacci_client.wait_for_goal_in_flight(timeout=5.0)
+    fibonacci_client.wait_for_goal_in_flight(timeout_sec=5.0)
 
     with pytest.raises(RuntimeError, match="goal is in flight"):
         fibonacci_client.reset()
