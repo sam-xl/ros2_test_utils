@@ -1,7 +1,8 @@
 # ros2_test_utils
 
 ## Overview
-This package provides a pytest plugin and test helper classes for integration tests of ROS 2 interfaces. Currently this covers actions, but services and topics are planned. 
+
+This package provides a pytest plugin and test helper classes for integration tests of ROS 2 interfaces. Currently this covers actions, but services and topics are planned.
 
 **Maintainer:** D. Kroezen (GitHub username: dave992)
 
@@ -12,16 +13,19 @@ Requires Python 3.10+, ROS2 Humble or later.
 ### Build from source
 
 To build from source, clone the latest version from this repository into your workspace:
+
 ```bash
 git clone https://github.com/dave992/ros2_test_utils.git
 ```
 
 Install the dependencies of the cloned package using rosdep:
+
 ```bash
 rosdep install --from-paths src -iy
 ```
 
 Finally, build all packages in the workspace:
+
 ```bash
 colcon build [--merge-install] [--symlink-install]
 ```
@@ -29,6 +33,7 @@ colcon build [--merge-install] [--symlink-install]
 ## Usage
 
 To use this package, add it as a test dependency in your package's `package.xml`:
+
 ```xml
 <test_depend>ros2_test_utils</test_depend>
 ```
