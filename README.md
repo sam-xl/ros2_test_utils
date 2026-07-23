@@ -37,7 +37,7 @@ Once built or installed, the test helper classes and pytest fixtures are availab
 
 ## Detailed Documentation
 
-For the full API reference — outcomes, configuration, cancellation, async goals, inspection properties, and pytest fixtures — see [docs/index.md](docs/index.md).
+For the full API reference — outcomes, configuration, cancellation, async goals, inspection properties, and pytest fixtures — see [docs/index.rst](docs/index.rst).
 
 ## Bugs & Feature Requests
 
