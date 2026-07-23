@@ -1,5 +1,7 @@
 """Action server for ROS 2 integration tests."""
 
+from __future__ import annotations
+
 import itertools
 import threading
 import time
