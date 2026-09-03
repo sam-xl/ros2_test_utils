@@ -1,16 +1,15 @@
-********
 Examples
-********
+========
 
 Below some minimal examples are shown for the ``conftest.py`` and ``test_*.py`` file for the supported interfaces and helper classes.
 
 As shown, it is recommended to use the provided ``pytest`` fixtures to create your mock server or test client. By default these are created as part of a single ``test_node``. Alternatively, there are also fixtures available that let you specify the node yourself, so you have more control over the ``rclpy`` initialization / shutdown, and the executor that is used.
 
 Actions
-=======
+-------
 
 Testing of an Action server
----------------------------
+~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 When testing an action server, you can make use of the ``TestActionClient`` via the ``make_test_client`` fixture.
 
@@ -47,7 +46,7 @@ And the tests themselves:
    # ... more tests ...
 
 Testing of an Action client
-----------------------------
+~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 When testing an action client, use the ``MockActionServer`` via the ``make_mock_server`` fixture to stand in for the real server.
 
