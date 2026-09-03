@@ -28,6 +28,9 @@ CATKIN_IGNORE*
 .gitlab-ci-local/
 .ci_cache/
 
+# Sphinx
+docs/_build/
+.venv-docs/
 # Other
 *.pcd
 *.pyc
