@@ -1,5 +1,5 @@
 Actions
-=================
+=======
 
 .. autoclass:: ros2_test_utils.MockActionServer
    :members:
