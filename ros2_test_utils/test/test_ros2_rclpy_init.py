@@ -15,6 +15,7 @@ from unittest.mock import patch
 
 import pytest
 import rclpy
+
 from ros2_test_utils.fixtures import _ros2_rclpy_init_impl
 
 
