@@ -44,6 +44,20 @@ Once built or installed, the test helper classes and pytest fixtures are availab
 
 For the full API reference — outcomes, configuration, cancellation, async goals, inspection properties, and pytest fixtures — see [docs/index.rst](docs/index.rst).
 
+### Building the docs locally
+
+```bash
+python3 -m venv .venv-docs
+.venv-docs/bin/pip install sphinx furo pytest
+
+rm -rf docs/_build
+.venv-docs/bin/sphinx-build -W --keep-going -b html docs/ docs/_build/html
+```
+
+Open `docs/_build/html/index.html` in a browser to view the result.
+
+This mirrors the [docs CI workflow](.github/workflows/docs.yml).
+
 ## Bugs & Feature Requests
 
 Please report bugs and request features using the [Issue Tracker](https://github.com/dave992/ros2_test_utils/issues).
