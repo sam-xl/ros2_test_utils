@@ -30,7 +30,7 @@ CATKIN_IGNORE*
 
 # Sphinx
 docs/_build/
-
+.venv-docs/
 # Other
 *.pcd
 *.pyc
