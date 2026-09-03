@@ -60,4 +60,4 @@ This mirrors the [docs CI workflow](.github/workflows/docs.yml).
 
 ## Bugs & Feature Requests
 
-Please report bugs and request features using the [Issue Tracker](https://github.com/dave992/ros2_test_utils/issues).
+Please report bugs and request features using the [Issue Tracker](https://github.com/sam-xl/ros2_test_utils/issues).
