@@ -15,7 +15,7 @@ Requires Python 3.10+, ROS2 Humble or later.
 To build from source, clone the latest version from this repository into your workspace:
 
 ```bash
-git clone https://github.com/dave992/ros2_test_utils.git
+git clone https://github.com/sam-xl/ros2_test_utils.git
 ```
 
 Install the dependencies of the cloned package using rosdep:
