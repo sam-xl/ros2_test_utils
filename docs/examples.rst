@@ -11,7 +11,7 @@ Actions
 Testing of an Action server
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-When testing an action server, you can make use of the ``TestActionClient`` via the ``make_test_client`` fixture.
+When testing an action server, you can make use of the :class:`~ros2_test_utils.TestActionClient` via the :func:`~ros2_test_utils.fixtures.make_test_client` fixture.
 
 In your ``conftest.py`` define your fixtures and launch descriptions that are used in the tests.
 
@@ -48,7 +48,7 @@ And the tests themselves:
 Testing of an Action client
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-When testing an action client, use the ``MockActionServer`` via the ``make_mock_server`` fixture to stand in for the real server.
+When testing an action client, use the :class:`~ros2_test_utils.MockActionServer` via the :func:`~ros2_test_utils.fixtures.make_mock_server` fixture to stand in for the real server.
 
 .. code-block:: python
 
