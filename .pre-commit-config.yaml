@@ -3,7 +3,7 @@
 # Install with: pipx install pre-commit && pre-commit install
 repos:
   - repo: https://github.com/astral-sh/ruff-pre-commit
-    rev: v0.9.6
+    rev: v0.16.5
     hooks:
       - id: ruff
         name: ruff check
@@ -12,8 +12,8 @@ repos:
         name: ruff format
 
   - repo: https://github.com/executablebooks/mdformat
-    rev: 0.7.22
+    rev: 1.0.0
     hooks:
       - id: mdformat
         additional_dependencies:
-          - mdformat-ruff
+          - mdformat-ruff==0.1.3
