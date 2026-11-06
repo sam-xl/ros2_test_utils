@@ -22,15 +22,19 @@ factory fixtures from your package's conftest.py:
 """
 
 import threading
+import time
 
 import pytest
 import rclpy
 from rclpy.executors import MultiThreadedExecutor
+from rclpy.qos import QoSProfile
 
 from ros2_test_utils.action.client import TestActionClient
 from ros2_test_utils.action.server import MockActionServer
+from ros2_test_utils.topic.subscriber import TestSubscriber
 
-_WAIT_FOR_SERVER_TIMEOUT = 5.0
+_WAIT_TIMEOUT = 5.0
+_POLL_INTERVAL = 0.05
 
 
 # ---------------------------------------------------------------------------
@@ -197,7 +201,7 @@ def make_test_client(test_node):
     """
     created = []
 
-    def _factory(action_type, action_name, timeout_sec: float = _WAIT_FOR_SERVER_TIMEOUT):
+    def _factory(action_type, action_name, timeout_sec: float = _WAIT_TIMEOUT):
         client = TestActionClient(test_node, action_type, action_name)
         created.append(client)
         assert client.wait_for_server(timeout_sec=timeout_sec), (
@@ -258,7 +262,7 @@ def make_test_client_on_node(make_node):
         action_name,
         *,
         node_name: str = "test_client_node",
-        timeout_sec: float = _WAIT_FOR_SERVER_TIMEOUT,
+        timeout_sec: float = _WAIT_TIMEOUT,
     ):
         node = make_node(node_name)
         client = TestActionClient(node, action_type, action_name)
@@ -272,3 +276,89 @@ def make_test_client_on_node(make_node):
 
     for client in created:
         client.destroy()
+
+
+# ---------------------------------------------------------------------------
+# Topic fixtures
+# ---------------------------------------------------------------------------
+
+
+@pytest.fixture
+def make_test_subscriber(test_node):
+    """
+    Factory fixture for TestSubscriber.
+
+    Waits for a publisher on the topic before returning, so the code under test
+    must be publishing first.  All subscribers are automatically destroyed at
+    end of test.
+
+    Usage::
+
+        def test_something(make_test_subscriber):
+            subscriber = make_test_subscriber(String, '/chatter')
+            message = subscriber.wait_for_message(lambda m: m.data == 'hello')
+    """
+    created = []
+
+    def _factory(
+        msg_type,
+        topic,
+        *,
+        qos_profile: QoSProfile | int = 10,
+        timeout_sec: float = _WAIT_TIMEOUT,
+    ):
+        subscriber = TestSubscriber(test_node, msg_type, topic, qos_profile)
+        created.append(subscriber)
+        assert subscriber.wait_for_publisher(timeout_sec=timeout_sec), (
+            f"No publisher on '{topic}' within {timeout_sec}s"
+        )
+        return subscriber
+
+    yield _factory
+
+    for subscriber in created:
+        subscriber.destroy()
+
+
+@pytest.fixture
+def make_test_publisher(test_node):
+    """
+    Factory fixture for an rclpy Publisher that feeds the code under test.
+
+    Waits for a subscription on the topic before returning, so a reliable
+    message published right away is not lost.  It can still arrive late: the
+    subscription may discover the publisher after the publisher discovered it,
+    and then gets the message only with the publisher's next heartbeat.  Call
+    ``publisher.wait_for_all_acked()`` to wait until it has arrived.  All
+    publishers are automatically destroyed at end of test.
+
+    Usage::
+
+        def test_something(make_test_publisher):
+            publisher = make_test_publisher(String, '/chatter')
+            publisher.publish(String(data='hello'))
+            assert publisher.wait_for_all_acked(Duration(seconds=5))
+    """
+    created = []
+
+    def _factory(
+        msg_type,
+        topic,
+        *,
+        qos_profile: QoSProfile | int = 10,
+        timeout_sec: float = _WAIT_TIMEOUT,
+    ):
+        publisher = test_node.create_publisher(msg_type, topic, qos_profile)
+        created.append(publisher)
+        deadline = time.monotonic() + timeout_sec
+        while publisher.get_subscription_count() == 0:
+            assert time.monotonic() < deadline, (
+                f"No subscription on '{topic}' within {timeout_sec}s"
+            )
+            time.sleep(_POLL_INTERVAL)
+        return publisher
+
+    yield _factory
+
+    for publisher in created:
+        test_node.destroy_publisher(publisher)

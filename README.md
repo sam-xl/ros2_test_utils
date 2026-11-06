@@ -2,7 +2,7 @@
 
 ## Overview
 
-This package provides a pytest plugin and test helper classes for integration tests of ROS 2 interfaces. Currently this covers actions, but services and topics are planned.
+This package provides a pytest plugin and test helper classes for integration tests of ROS 2 interfaces. Currently this covers actions and topics, but services are planned.
 
 **Maintainer:** D. Kroezen (GitHub username: dave992)
 
