@@ -5,7 +5,7 @@ package_name = "ros2_test_utils"
 setup(
     name=package_name,
     version="0.1.0",
-    packages=[package_name, f"{package_name}.action"],
+    packages=[package_name, f"{package_name}.action", f"{package_name}.topic"],
     data_files=[
         ("share/ament_index/resource_index/packages", ["resource/" + package_name]),
         ("share/" + package_name, ["package.xml"]),

@@ -18,3 +18,7 @@ Fixtures
 .. autofunction:: make_mock_server_on_node
 
 .. autofunction:: make_test_client_on_node
+
+.. autofunction:: make_test_subscriber
+
+.. autofunction:: make_test_publisher
