@@ -53,9 +53,10 @@ class TestSubscriber:
         )
 
     def wait_for_publisher(self, timeout_sec: float = 5.0) -> bool:
-        """Block until a publisher matches. Returns True on success, False on timeout."""
+        """Block until the topic has a publisher. Returns True on success, False on timeout."""
         deadline = time.monotonic() + timeout_sec
-        while self._subscription.get_publisher_count() == 0:
+        # Node.count_publishers, as Subscription.get_publisher_count is missing in Humble.
+        while self._node.count_publishers(self._subscription.topic_name) == 0:
             if time.monotonic() > deadline:
                 return False
             time.sleep(_POLL_INTERVAL)
